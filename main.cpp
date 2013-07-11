@@ -56,6 +56,8 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <iostream>
+#include <sstream>
+
 using namespace std;
 
 #define CLEF 12345
@@ -201,22 +203,40 @@ private:
 
 int main(int argc, char *argv[])
 {
+    int height;
+    int width;
     QGuiApplication app(argc, argv);
     if(argc<3)
     {
         qWarning("You need to set the size of the window.");
-        qWarning("eg: compositor 1280 720");
-        return 0;
+        qWarning("the size by default will be set to 1280x720");
+        width = 1280;
+        height= 720;
     }
-    else if(atoi(argv[1]) && atoi(argv[2]))
+    else
     {
-        qWarning("You need to set a number.");
-        qWarning("eg: compositor 1280 720");
-        return 0;
+        istringstream in(argv[1]);
+        istringstream in2(argv[2]);
+        int i;
+        int j;
+        if (!(in >> i && in.eof()) || !(in2 >> j && in2.eof()))
+        {
+            qWarning("You need to set a number.");
+            qWarning("eg: compositor 1280 720");
+            return 0;
+
+        }else
+        {
+            width = atoi(argv[1]);
+            height= atoi(argv[2]);
+        }
     }
+
+
+
     QmlCompositor compositor;
     compositor.setTitle(QLatin1String("QML Compositor"));
-    compositor.setGeometry(0, 0, argv[2], argv[3]);
+    compositor.setGeometry(0, 0,width,height );
     compositor.show();
 
     compositor.rootContext()->setContextProperty("compositor", &compositor);
@@ -230,5 +250,7 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
+
+
 
 #include "main.moc"

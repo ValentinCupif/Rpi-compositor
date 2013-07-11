@@ -52,13 +52,6 @@ Item {
 
     onHasFullscreenWindowChanged: console.log("has fullscreen window: " + hasFullscreenWindow);
 
-    WebView{
-        id:webview
-        onProgressChanged:{
-            console.log
-        }
-    }
-
     MouseArea {
         anchors.fill: parent
         onClicked: {
